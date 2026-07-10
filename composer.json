@@ -7,7 +7,7 @@
                     "php":  "\u003e=8.1",
                     "ext-redis":  "*",
                     "elavora/api-framework":  "^0.3.1",
-                    "elavora/api-redis":  "^0.1"
+                    "elavora/api-redis":  "^0.1 || ^0.2"
                 },
     "autoload":  {
                      "psr-4":  {
