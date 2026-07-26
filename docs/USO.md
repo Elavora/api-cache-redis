@@ -1,52 +1,55 @@
 # Guia de uso
 
-Adapter opcional de cache Redis para o framework Elavora.
-
 ## Instalacao
 
 ```bash
-composer require elavora/api-cache-redis
+composer require elavora/api-cache-redis:^1.0
 ```
 
-## Quando usar
+Requisitos de runtime:
 
-- Registrar um backend de cache para o contrato do framework.
-- Evitar acoplamento da aplicacao a APCu ou Redis diretamente.
-- Centralizar prefixo e TTL usados pela aplicacao.
+- PHP `>=8.3`
+- `ext-redis`
+- `elavora/api-framework` `^1.0`
+- `elavora/api-redis` `^1.0`
 
-## Exemplo rapido
+## Registro
 
 ```php
 use Elavora\Api\Extension\CacheRedis\RedisCacheExtension;
 
 $application->extend(new RedisCacheExtension([
-    'prefix' => 'app:',
+    'host' => getenv('REDIS_HOST') ?: '127.0.0.1',
+    'port' => getenv('REDIS_PORT') ?: '6379',
+    'password' => getenv('REDIS_PASSWORD') ?: null,
+    'database' => getenv('REDIS_DATABASE') ?: '0',
+    'prefix' => 'app:cache:',
     'ttl' => 3600,
 ]));
 ```
 
-## Principais pontos de entrada
+As opcoes de conexao seguem as validacoes de `RedisConfig`. `prefix` deve ser
+string. `ttl` aceita inteiro, string inteira ou `null`.
 
-- `Elavora\Api\Extension\CacheRedis\RedisCache`
-- `Elavora\Api\Extension\CacheRedis\RedisCacheExtension`
+## Semantica do TTL
 
-## Dependencias de runtime
+- `set('key', $value)` usa o TTL padrao configurado.
+- `set('key', $value, 10)` usa 10 segundos, mesmo se o padrao for diferente.
+- Sem TTL padrao, `set('key', $value)` grava sem expiracao.
+- TTL zero ou negativo remove a chave em vez de manter o valor.
 
-- `ext-redis` `*`
-- `elavora/api-framework` `^0.3.1`
-- `elavora/api-redis` `^0.1`
+Falhas retornadas por `set`, `setex` ou `del` geram `RuntimeException`. Remover
+uma chave inexistente continua sendo uma operacao idempotente e bem-sucedida.
+As mensagens nao incluem o valor serializado.
 
-## Validacao no projeto consumidor
-
-Depois de instalar o pacote, rode os testes da aplicacao consumidora. Para uma verificacao isolada do pacote, use container:
+## Qualidade
 
 ```bash
-docker run --rm -v "${PWD}:/workspace" -w "/workspace/api-cache-redis" composer:2 composer validate --strict --no-check-publish
-docker run --rm -v "${PWD}:/workspace" -w "/workspace/api-cache-redis" composer:2 sh -lc "find . \\( -path ./.git -o -path ./vendor \\) -prune -o -name '*.php' -print0 | xargs -0 -r -n1 php -l"
+composer validate --strict --no-check-publish
+composer lint
+composer analyse
+composer test
+composer check
 ```
 
-## Observacoes
-
-- Mantenha regras de produto fora deste pacote.
-- Prefira configurar extensoes no bootstrap da aplicacao.
-- Instale apenas os modulos que a aplicacao realmente usa.
+`composer check` executa lint portatil, PHPStan nivel 8 e PHPUnit.

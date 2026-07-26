@@ -6,16 +6,19 @@ namespace Elavora\Api\Extension\CacheRedis;
 
 use Elavora\Api\Extension\Redis\Contracts\RedisClient;
 use Elavora\Api\Framework\Contracts\CacheStore;
+use RuntimeException;
 
 final class RedisCache implements CacheStore
 {
     /**
      * @param RedisClient $redis Cliente Redis reutilizavel.
      * @param string $prefix Prefixo aplicado nas chaves.
+     * @param int|null $defaultTtlSeconds TTL padrao em segundos.
      */
     public function __construct(
         private readonly RedisClient $redis,
-        private readonly string $prefix = ''
+        private readonly string $prefix = '',
+        private readonly ?int $defaultTtlSeconds = null
     ) {
     }
 
@@ -40,18 +43,24 @@ final class RedisCache implements CacheStore
     {
         $key = $this->cacheKey($key);
         $value = serialize($value);
+        $ttlSeconds ??= $this->defaultTtlSeconds;
 
         if ($ttlSeconds === null) {
-            $this->redis->set($key, $value);
+            if (!$this->redis->set($key, $value)) {
+                throw new RuntimeException('Falha ao gravar o valor no cache Redis.');
+            }
+
             return;
         }
 
         if ($ttlSeconds <= 0) {
-            $this->redis->del($key);
+            $this->deleteCacheKey($key);
             return;
         }
 
-        $this->redis->setex($key, $ttlSeconds, $value);
+        if (!$this->redis->setex($key, $ttlSeconds, $value)) {
+            throw new RuntimeException('Falha ao gravar o valor com TTL no cache Redis.');
+        }
     }
 
     /**
@@ -59,11 +68,18 @@ final class RedisCache implements CacheStore
      */
     public function delete(string $key): void
     {
-        $this->redis->del($this->cacheKey($key));
+        $this->deleteCacheKey($this->cacheKey($key));
     }
 
     private function cacheKey(string $key): string
     {
         return $this->prefix . $key;
+    }
+
+    private function deleteCacheKey(string $key): void
+    {
+        if ($this->redis->del($key) === false) {
+            throw new RuntimeException('Falha ao remover o valor do cache Redis.');
+        }
     }
 }

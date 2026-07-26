@@ -2,9 +2,26 @@
 
 Adapter opcional de cache Redis para o framework Elavora.
 
-Registre `RedisCacheExtension` com as opcoes `host`, `port`, `timeout`,
-`password`, `database` e `prefix` conforme a necessidade da aplicacao.
+## Requisitos
 
-Este pacote usa `elavora/api-redis` para abrir e reutilizar conexoes Redis. Se
-outra extensao registrar uma implementacao propria de `RedisConnectionFactory`,
-o cache passa a usar essa factory automaticamente.
+- PHP `>=8.3`
+- `ext-redis`
+- `elavora/api-framework` `^1.0`
+- `elavora/api-redis` `^1.0`
+
+```php
+use Elavora\Api\Extension\CacheRedis\RedisCacheExtension;
+
+$application->extend(new RedisCacheExtension([
+    'host' => getenv('REDIS_HOST') ?: '127.0.0.1',
+    'port' => getenv('REDIS_PORT') ?: '6379',
+    'prefix' => 'app:cache:',
+    'ttl' => 3600,
+]));
+```
+
+O TTL informado em cada `set()` tem precedencia sobre `ttl`. Sem TTL padrao e
+sem TTL explicito, a chave nao expira. TTL zero ou negativo remove a chave.
+Falhas de `set`, `setex` e `del` sao propagadas como `RuntimeException`.
+
+Consulte [docs/USO.md](docs/USO.md) para o contrato completo.
