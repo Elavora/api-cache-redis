@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.3",
+        "ext-filter": "*",
         "ext-redis": "*",
         "elavora/api-framework": "^1.0",
         "elavora/api-redis": "^1.0"
