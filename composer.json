@@ -1,28 +1,37 @@
 {
-    "name":  "elavora/api-cache-redis",
-    "description":  "Adapter Redis opcional para cache no framework Elavora",
-    "type":  "library",
-    "license":  "MIT",
-    "require":  {
-                    "php":  "\u003e=8.1",
-                    "ext-redis":  "*",
-                    "elavora/api-framework":  "^0.3.1",
-                    "elavora/api-redis":  "^0.1"
-                },
-    "autoload":  {
-                     "psr-4":  {
-                                   "Elavora\\Api\\Extension\\CacheRedis\\":  "src/"
-                               }
-                 },
-    "require-dev":  {
-                        "phpunit/phpunit":  "^10.5 || ^11.0 || ^12.0"
-                    },
-    "scripts":  {
-                    "test":  "phpunit -c phpunit.xml"
-                },
-    "extra":  {
-                  "branch-alias":  {
-                                       "dev-main":  "0.1-dev"
-                                   }
-              }
+    "name": "elavora/api-cache-redis",
+    "description": "Adapter Redis opcional para cache no framework Elavora",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.3",
+        "ext-filter": "*",
+        "ext-redis": "*",
+        "elavora/api-framework": "^1.0",
+        "elavora/api-redis": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elavora\\Api\\Extension\\CacheRedis\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.2",
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "scripts": {
+        "lint": "@php tools/lint.php",
+        "analyse": "@php vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress",
+        "test": "@php vendor/bin/phpunit -c phpunit.xml",
+        "check": [
+            "@lint",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    }
 }
