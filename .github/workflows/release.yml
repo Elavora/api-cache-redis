@@ -1,0 +1,18 @@
+name: Release
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    uses: Elavora/.github/.github/workflows/release.yml@5715f070384cdc70885f1a77670e54fefcfb255d
+    with:
+      package_name: elavora/api-cache-redis
+      automation_ref: 5715f070384cdc70885f1a77670e54fefcfb255d
+    secrets: inherit
