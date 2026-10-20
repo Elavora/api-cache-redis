@@ -11,7 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Elavora\Api\Extension\CacheRedis\\": "src/"
+            "Elavora\\Api\\Extension\\CacheRedis\\": "src/"
         }
     },
     "require-dev": {
