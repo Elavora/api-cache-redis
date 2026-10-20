@@ -16,14 +16,17 @@ final class RedisCacheExtension implements Extension
 {
     private readonly RedisConfig $redisConfig;
     private readonly string $prefix;
+    private readonly ?int $defaultTtlSeconds;
 
     /**
-     * @param array{host?: string, port?: int|string, timeout?: float|int|string, password?: string|null, database?: int|string|null, prefix?: string} $config
+     * @param array{host?: string, port?: int|string, timeout?: float|int|string,
+     *     password?: string|null, database?: int|string|null, prefix?: string, ttl?: int|string|null} $config
      */
-    public function __construct(private readonly array $config)
+    public function __construct(array $config = [])
     {
         $this->redisConfig = RedisConfig::fromArray($config);
         $this->prefix = (string) ($config['prefix'] ?? '');
+        $this->defaultTtlSeconds = isset($config['ttl']) ? (int) $config['ttl'] : null;
     }
 
     /**
@@ -37,7 +40,8 @@ final class RedisCacheExtension implements Extension
             CacheStore::class,
             fn (Container $container): RedisCache => new RedisCache(
                 redis: $container->get(RedisConnectionFactory::class)->connect($this->redisConfig),
-                prefix: $this->prefix
+                prefix: $this->prefix,
+                defaultTtlSeconds: $this->defaultTtlSeconds,
             )
         );
     }
