@@ -307,19 +307,19 @@ docker run --rm -v "${PWD}:/origem" -w /origem ghcr.io/elavora/php-dev:8.3-lates
 ### Antes disso (validação com o `api-redis` local)
 
 Monte também o clone local do `api-redis` (na branch `feat/framework-2`) e use um
-repositório `path`. O comando copia o repo para `/tmp/work` dentro do container e altera
-o `composer.json` só nessa cópia. **Não commite** o repositório `path` nem o alias.
+repositório `path`. O comando faz um `git clone` do repo em `/tmp/work` dentro do container e altera
+o `composer.json` só nesse clone. O clone pega o último commit da branch atual: commite antes de rodar. **Não commite** o repositório `path` nem o alias.
 
 No PowerShell, na raiz deste repo, com o `api-redis` na pasta vizinha:
 
 ```powershell
-docker run --rm -v "${PWD}:/origem:ro" -v "${PWD}\..\api-redis:/api-redis:ro" ghcr.io/elavora/php-dev:8.3-latest sh -lc 'git config --global --add safe.directory "*" && cp -r /origem /tmp/work && cd /tmp/work && composer validate --strict --no-check-publish && composer config repositories.api-redis path /api-redis && composer require --no-update "elavora/api-redis:dev-feat/framework-2 as 1.0.0" && composer update --no-interaction --ignore-platform-req=ext-redis && composer test'
+docker run --rm -v "${PWD}:/origem:ro" -v "${PWD}\..\api-redis:/api-redis:ro" ghcr.io/elavora/php-dev:8.3-latest sh -lc 'git config --global --add safe.directory "*" && git clone -q /origem /tmp/work && cd /tmp/work && composer validate --strict --no-check-publish && composer config repositories.api-redis path /api-redis && composer require --no-update "elavora/api-redis:dev-feat/framework-2 as 1.0.0" && composer update --no-interaction --ignore-platform-req=ext-redis && composer test'
 ```
 
 - O `composer validate` roda antes da alteração, sobre o `composer.json` real.
 - O alias `dev-feat/framework-2 as 1.0.0` faz a branch local do `api-redis` atender `^1.0`.
-- A cópia não pode ter `vendor/` nem `composer.lock` vindos do repo. Se existirem, apague
-  antes de rodar.
+- O clone não traz `vendor/` nem `composer.lock` do repo, então nada precisa ser apagado.
+- Com o alias, o teste do `composer.json` que confere `^1.0` do `api-redis` é pulado de propósito.
 
 ## Observações
 
