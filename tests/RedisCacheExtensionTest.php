@@ -284,4 +284,20 @@ final class RedisCacheExtensionTest extends TestCase
         self::assertNull($this->factory->lastConfig?->database);
         self::assertSame([['set', ['api:cache:k', 's:1:"v";']]], $this->factory->client->calls);
     }
+
+    // Binding inválido (USO.md)
+
+    public function testInvalidFactoryBindingThrowsLogicException(): void
+    {
+        $application = Application::create();
+        $application->container()->instance(RedisConnectionFactory::class, new stdClass());
+        $application->extend(new RedisCacheExtension());
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage(
+            'O binding de Elavora\Api\Extension\Redis\Contracts\RedisConnectionFactory deve resolver uma instancia dessa interface.',
+        );
+
+        $application->container()->get(CacheStore::class);
+    }
 }
