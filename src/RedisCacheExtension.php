@@ -11,6 +11,7 @@ use Elavora\Api\Framework\Application;
 use Elavora\Api\Framework\Container;
 use Elavora\Api\Framework\Contracts\CacheStore;
 use Elavora\Api\Framework\Contracts\Extension;
+use LogicException;
 
 final class RedisCacheExtension implements Extension
 {
@@ -39,10 +40,27 @@ final class RedisCacheExtension implements Extension
         $application->container()->bind(
             CacheStore::class,
             fn(Container $container): RedisCache => new RedisCache(
-                redis: $container->get(RedisConnectionFactory::class)->connect($this->redisConfig),
+                redis: $this->connectionFactory($container)->connect($this->redisConfig),
                 prefix: $this->prefix,
                 defaultTtlSeconds: $this->defaultTtlSeconds,
             ),
         );
+    }
+
+    /**
+     * Obtém a factory Redis do container, garantindo o contrato esperado.
+     */
+    private function connectionFactory(Container $container): RedisConnectionFactory
+    {
+        $factory = $container->get(RedisConnectionFactory::class);
+
+        if (!$factory instanceof RedisConnectionFactory) {
+            throw new LogicException(sprintf(
+                'O binding de %s deve resolver uma instancia dessa interface.',
+                RedisConnectionFactory::class,
+            ));
+        }
+
+        return $factory;
     }
 }
