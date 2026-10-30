@@ -263,7 +263,7 @@ final class RedisCacheTest extends TestCase
     /** @return iterable<string, array{\Closure(RedisCache): mixed}> */
     public static function operations(): iterable
     {
-        yield 'get' => [static fn (RedisCache $cache): mixed => $cache->get('k')];
+        yield 'get' => [static fn(RedisCache $cache): mixed => $cache->get('k')];
         yield 'set' => [static function (RedisCache $cache): mixed {
             $cache->set('k', 'v');
 

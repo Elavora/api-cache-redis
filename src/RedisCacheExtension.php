@@ -38,11 +38,11 @@ final class RedisCacheExtension implements Extension
 
         $application->container()->bind(
             CacheStore::class,
-            fn (Container $container): RedisCache => new RedisCache(
+            fn(Container $container): RedisCache => new RedisCache(
                 redis: $container->get(RedisConnectionFactory::class)->connect($this->redisConfig),
                 prefix: $this->prefix,
                 defaultTtlSeconds: $this->defaultTtlSeconds,
-            )
+            ),
         );
     }
 }

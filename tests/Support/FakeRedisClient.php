@@ -72,7 +72,7 @@ final class FakeRedisClient implements RedisClient
     /** @return list<array{0: string, 1: list<mixed>}> */
     public function callsTo(string $method): array
     {
-        return array_values(array_filter($this->calls, static fn (array $call): bool => $call[0] === $method));
+        return array_values(array_filter($this->calls, static fn(array $call): bool => $call[0] === $method));
     }
 
     /** @return list<array{0: string, 1: list<mixed>}> chamadas que gravam valor (set/setex) */
@@ -80,7 +80,7 @@ final class FakeRedisClient implements RedisClient
     {
         return array_values(array_filter(
             $this->calls,
-            static fn (array $call): bool => $call[0] === 'set' || $call[0] === 'setex',
+            static fn(array $call): bool => $call[0] === 'set' || $call[0] === 'setex',
         ));
     }
 

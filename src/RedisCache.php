@@ -18,8 +18,7 @@ final class RedisCache implements CacheStore
         private readonly RedisClient $redis,
         private readonly string $prefix = '',
         private readonly ?int $defaultTtlSeconds = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Recupera um valor serializado do Redis.
