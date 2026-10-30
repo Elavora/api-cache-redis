@@ -195,7 +195,8 @@ Normalização:
      `NativeRedisConnectionFactory`.
 2. Liga `Elavora\Api\Framework\Contracts\CacheStore` no container a uma função que cria
    o `RedisCache`:
-   - pega `RedisConnectionFactory::class` do container;
+   - pega `RedisConnectionFactory::class` do container e confere com `instanceof` que o valor é uma
+     `RedisConnectionFactory` (veja "Binding inválido" abaixo);
    - chama `connect()` com o `RedisConfig` montado no construtor;
    - cria `new RedisCache(cliente, prefix, ttl)`.
 
@@ -221,6 +222,24 @@ guarda o último `RedisConfig` e devolve um cliente falso):
 | `instance(...$factory)`, `extend(new RedisCacheExtension())`, `get(CacheStore::class)->set('k', 'v')` | o cliente falso recebeu `set('k', 's:1:"v";')`; config com host `'127.0.0.1'`, port `6379`, database `null` |
 | `instance(...$factory)`, `extend(new RedisCacheExtension(['host' => 'redis', 'port' => '6380', 'password' => '', 'database' => '2', 'extra' => 1]))`, `get(CacheStore::class)` | config com port `6380`, password `null`, database `2`; nenhum erro pela chave `extra` |
 | Container vazio, `extend(new RedisCacheExtension(['host' => 'redis']))` | `has(RedisConnectionFactory::class)` é `true`; `get(RedisConnectionFactory::class)` é `RedisConnectionManager`; nenhuma conexão aberta |
+
+### Binding inválido
+
+Se o binding de `RedisConnectionFactory::class` resolver um valor que não implementa a interface, o
+`get(CacheStore::class)` lança `LogicException` (e não um erro fatal do PHP), com a mensagem exata:
+
+```text
+O binding de Elavora\Api\Extension\Redis\Contracts\RedisConnectionFactory deve resolver uma instancia dessa interface.
+```
+
+- A mensagem não tem acento em `instancia`.
+- O erro aparece só ao resolver o `CacheStore`: `register()` não resolve a factory e não lança exceção.
+- Nenhuma conexão é aberta.
+
+| Cenário | Resultado |
+|---|---|
+| `instance(RedisConnectionFactory::class, new stdClass())`, `extend(new RedisCacheExtension())`, `get(CacheStore::class)` | `LogicException` com a mensagem acima |
+| `instance(RedisConnectionFactory::class, ...)` com uma `RedisConnectionFactory` válida | sem erro (cenários da seção anterior) |
 
 Registro manual:
 
