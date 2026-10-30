@@ -12,12 +12,13 @@ final class RedisCache implements CacheStore
     /**
      * @param RedisClient $redis Cliente Redis reutilizavel.
      * @param string $prefix Prefixo aplicado nas chaves.
+     * @param int|null $defaultTtlSeconds TTL usado quando a chamada nao informa um; null nao expira.
      */
     public function __construct(
         private readonly RedisClient $redis,
-        private readonly string $prefix = ''
-    ) {
-    }
+        private readonly string $prefix = '',
+        private readonly ?int $defaultTtlSeconds = null,
+    ) {}
 
     /**
      * Recupera um valor serializado do Redis.
@@ -39,10 +40,10 @@ final class RedisCache implements CacheStore
     public function set(string $key, mixed $value, ?int $ttlSeconds = null): void
     {
         $key = $this->cacheKey($key);
-        $value = serialize($value);
+        $ttlSeconds ??= $this->defaultTtlSeconds;
 
         if ($ttlSeconds === null) {
-            $this->redis->set($key, $value);
+            $this->redis->set($key, serialize($value));
             return;
         }
 
@@ -51,7 +52,7 @@ final class RedisCache implements CacheStore
             return;
         }
 
-        $this->redis->setex($key, $ttlSeconds, $value);
+        $this->redis->setex($key, $ttlSeconds, serialize($value));
     }
 
     /**
