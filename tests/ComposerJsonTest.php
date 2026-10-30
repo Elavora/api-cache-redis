@@ -34,12 +34,6 @@ final class ComposerJsonTest extends TestCase
     public function testRequiresApiRedis1(): void
     {
         $constraint = $this->composer['require']['elavora/api-redis'] ?? null;
-        if (is_string($constraint) && str_contains($constraint, ' as ')) {
-            // Validação local do meio-tempo (docs/USO.md): a cópia em /tmp/work recebe o alias
-            // "dev-feat/framework-2 as 1.0.0", que não vai para o commit.
-            self::markTestSkipped('composer.json alterado pela validação local com alias do api-redis.');
-        }
-
         self::assertSame('^1.0', $constraint);
     }
 
