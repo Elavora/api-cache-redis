@@ -26,9 +26,9 @@ final class ComposerJsonTest extends TestCase
         self::assertSame('*', $this->composer['require']['ext-redis'] ?? null);
     }
 
-    public function testRequiresFramework2(): void
+    public function testRequiresFramework3(): void
     {
-        self::assertSame('^2.0', $this->composer['require']['elavora/api-framework'] ?? null);
+        self::assertSame('^3.0', $this->composer['require']['elavora/api-framework'] ?? null);
     }
 
     public function testRequiresApiRedis1(): void
@@ -37,9 +37,9 @@ final class ComposerJsonTest extends TestCase
         self::assertSame('^1.0', $constraint);
     }
 
-    public function testBranchAliasIs10Dev(): void
+    public function testBranchAliasIs20Dev(): void
     {
-        self::assertSame('1.0-dev', $this->composer['extra']['branch-alias']['dev-main'] ?? null);
+        self::assertSame('2.0-dev', $this->composer['extra']['branch-alias']['dev-main'] ?? null);
     }
 
     public function testAutoloadUnchanged(): void
