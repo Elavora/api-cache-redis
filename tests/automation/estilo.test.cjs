@@ -89,7 +89,7 @@ test.describe('composer.json', () => {
         const c = composer();
         assert.equal((c.require || {}).php, '>=8.3');
         assert.equal((c.require || {})['elavora/api-framework'], '^3.0');
-        assert.equal((c.require || {})['elavora/api-redis'], '^1.0');
+        assert.equal((c.require || {})['elavora/api-redis'], '^2.0');
         assert.equal((c.require || {})['ext-redis'], '*', 'ext-redis deveria continuar em require');
     });
 
