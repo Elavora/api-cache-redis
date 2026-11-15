@@ -6,8 +6,8 @@
   "require": {
     "php": ">=8.3",
     "ext-redis": "*",
-    "elavora/api-framework": "^2.0",
-    "elavora/api-redis": "^1.0"
+    "elavora/api-framework": "^3.0",
+    "elavora/api-redis": "^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -36,7 +36,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-main": "1.0-dev"
+      "dev-main": "2.0-dev"
     }
   }
 }
