@@ -901,11 +901,11 @@ falha no teste. Exemplos que passam:
 - `github/codeql-action/analyze` com um SHA novo e `init` ainda no antigo (o grupo do Dependabot cuida disso);
 - `Elavora/.github/.github/workflows/release.yml@2a6cd142f0cd3f1aac93b98d19f561d4f91e169e # 1.3.2` trocado por outro
   SHA com `# 1.4.0`;
-- `"elavora/code-standards": "^2.0"` trocado por `"^2.0"`;
+- `"elavora/code-standards": "^2.0"` trocado por `"^2.1"`;
 - `"phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"` trocado por `"^10.5 || ^11.0 || ^12.0 || ^13.0"`.
 
 Exemplos que falham: `...release.yml@1.4.0` (tag em vez de SHA), um `uses:` sem o comentário de versão, SHA curto,
-`"elavora/code-standards": "^2.0"` e `"elavora/code-standards": "^2.0"`.
+`"elavora/code-standards": "^2.0"` e `"elavora/code-standards": "^1.0"`.
 
 Como rodar: veja [Desenvolvimento e testes](DESENVOLVIMENTO.md#testes-da-automação). No CI, rodam no workflow
 **Automação**, em todo PR e em todo push na `main`.
