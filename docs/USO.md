@@ -16,7 +16,7 @@ composer require elavora/api-cache-redis:^1.0
 | Item | Valor |
 |---|---|
 | Versão deste pacote | `1.0.0` (primeira versão compatível com o framework 2) |
-| `php` | `>=8.3` |
+| `php` | `>=8.4` |
 | `ext-redis` | `*` |
 | `elavora/api-framework` | `^2.0` |
 | `elavora/api-redis` | `^1.0` |
@@ -28,7 +28,7 @@ fluxo central sobe o major da última tag legada (`v0.1.1`, que conta como `0.1.
 Não existe compatibilidade com o framework `0.x` nem `1.x`. A versão `0.1.1` deste
 pacote continua sendo a última para o framework `^0.3.1`.
 
-O framework 2 exige PHP 8.3. Por isso este pacote também passa a exigir PHP 8.3.
+O framework 2 exige PHP 8.4. Por isso este pacote também passa a exigir PHP 8.4.
 O contrato de extensão do framework não mudou (`Extension::register(Application)`,
 `Container` com `has()`, `bind()`, `instance()` e `get()`).
 
@@ -36,7 +36,7 @@ O contrato de extensão do framework não mudou (`Extension::register(Applicatio
 
 O `composer.json` do pacote deve ter:
 
-- `require.php` = `">=8.3"`
+- `require.php` = `">=8.4"`
 - `require.ext-redis` = `"*"`
 - `require.elavora/api-framework` = `"^2.0"`
 - `require.elavora/api-redis` = `"^1.0"`
@@ -300,12 +300,12 @@ $application->container()->get(CacheStore::class)->set('k', 'v');
 
 ## Validação local
 
-Os testes rodam no container `ghcr.io/elavora/php-dev:8.3-latest`, que já traz `ext-redis`. Os testes unitários usam
+Os testes rodam no container `ghcr.io/elavora/php-dev:8.4-latest`, que já traz `ext-redis`. Os testes unitários usam
 um `RedisClient` falso: não precisam de servidor Redis. O comando completo, igual ao do CI, está em
 [Desenvolvimento e testes](DESENVOLVIMENTO.md#validar-como-o-ci). Para só rodar a suíte, no PowerShell, na raiz do repo:
 
 ```powershell
-docker run --rm --mount "type=bind,source=$($PWD.Path),target=/workspace" -w /workspace ghcr.io/elavora/php-dev:8.3-latest sh -lc 'git config --global --add safe.directory /workspace && composer install --no-interaction --prefer-dist && composer test'
+docker run --rm --mount "type=bind,source=$($PWD.Path),target=/workspace" -w /workspace ghcr.io/elavora/php-dev:8.4-latest sh -lc 'git config --global --add safe.directory /workspace && composer install --no-interaction --prefer-dist && composer test'
 ```
 ## Observações
 

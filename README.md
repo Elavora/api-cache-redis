@@ -8,7 +8,7 @@
 
 Adapter opcional de cache Redis para o framework Elavora 2.
 
-- Versão `1.0.0`: exige `elavora/api-framework` `^3.0`, `elavora/api-redis` `^2.0`, PHP `>=8.3` e `ext-redis`.
+- Versão `1.0.0`: exige `elavora/api-framework` `^4.1`, `elavora/api-redis` `^3.0`, PHP `>=8.4` e `ext-redis`.
 - Para o framework `^0.3.1`, use a versão `0.1.1`.
 
 ## Instalação
@@ -17,8 +17,8 @@ Adapter opcional de cache Redis para o framework Elavora 2.
 composer require elavora/api-cache-redis:^1.0
 ```
 
-Requisitos: PHP `>=8.3`, `ext-redis`, `elavora/api-framework` `^3.0` e
-`elavora/api-redis` `^2.0`.
+Requisitos: PHP `>=8.4`, `ext-redis`, `elavora/api-framework` `^4.1` e
+`elavora/api-redis` `^3.0`.
 
 ## Uso
 
@@ -34,11 +34,11 @@ A especificação completa está em [docs/USO.md](docs/USO.md).
 
 ## Desenvolvimento e testes
 
-Você só precisa de Docker. O ambiente é a imagem `ghcr.io/elavora/php-dev:8.3-latest`: abra o repositório no VS Code
+Você só precisa de Docker. O ambiente é a imagem `ghcr.io/elavora/php-dev:8.4-latest`: abra o repositório no VS Code
 com **Dev Containers: Reopen in Container**, ou rode no PowerShell:
 
 ```powershell
-docker run --rm --mount "type=bind,source=$($PWD.Path),target=/workspace" -w /workspace ghcr.io/elavora/php-dev:8.3-latest sh -lc 'git config --global --add safe.directory /workspace && composer install --no-interaction --prefer-dist && composer check'
+docker run --rm --mount "type=bind,source=$($PWD.Path),target=/workspace" -w /workspace ghcr.io/elavora/php-dev:8.4-latest sh -lc 'git config --global --add safe.directory /workspace && composer install --no-interaction --prefer-dist && composer check'
 ```
 
 A imagem traz `ext-redis`, e os testes não precisam de servidor Redis: usam clientes falsos. Detalhes, e o que roda no

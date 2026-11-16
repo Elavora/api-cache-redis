@@ -4,10 +4,10 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=8.3",
+    "php": ">=8.4",
     "ext-redis": "*",
-    "elavora/api-framework": "^3.0",
-    "elavora/api-redis": "^2.0"
+    "elavora/api-framework": "^4.1",
+    "elavora/api-redis": "^3.0"
   },
   "autoload": {
     "psr-4": {
@@ -36,7 +36,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-main": "2.0-dev"
+      "dev-main": "3.0-dev"
     }
   }
 }
