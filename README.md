@@ -8,7 +8,7 @@
 
 Adapter opcional de cache Redis para o framework Elavora 2.
 
-- Versão `1.0.0`: exige `elavora/api-framework` `^4.1`, `elavora/api-redis` `^3.0`, PHP `>=8.4` e `ext-redis`.
+- Versão `1.0.0`: exige `elavora/api-framework` `^4.1 || ^5.0 || ^6.0`, `elavora/api-redis` `^3.0`, PHP `>=8.4` e `ext-redis`.
 - Para o framework `^0.3.1`, use a versão `0.1.1`.
 
 ## Instalação
@@ -17,7 +17,7 @@ Adapter opcional de cache Redis para o framework Elavora 2.
 composer require elavora/api-cache-redis:^1.0
 ```
 
-Requisitos: PHP `>=8.4`, `ext-redis`, `elavora/api-framework` `^4.1` e
+Requisitos: PHP `>=8.4`, `ext-redis`, `elavora/api-framework` `^4.1 || ^5.0 || ^6.0` e
 `elavora/api-redis` `^3.0`.
 
 ## Uso
